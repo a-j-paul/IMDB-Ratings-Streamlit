@@ -3,3 +3,6 @@ Quick project to test out [streamlit](https://streamlit.io/). Scrape IMDB for ep
 
 ## Usage
     streamlit run imdb_ratings\ratings_app.py
+
+## Demo
+![Image of app in use](images/demo1.gif)
