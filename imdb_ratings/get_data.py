@@ -25,7 +25,7 @@ def get_episode_ratings_for_season(show_url: str, season: str = "1"):
     for rating_div in ratings_divs:
         rating = rating_div.find(class_="ipl-rating-star__rating").text
         data.append({"Season": season, "Episode": epi, "Rating": float(rating)})
-        epi = epi + 1
+        epi += 1
 
     return pd.DataFrame(data)
 
@@ -48,6 +48,12 @@ def get_show_name(show_url: str):
     response = requests.get(show_url)
     soup = BeautifulSoup(response.text, "html.parser")
     return soup.find("h3").find("a").text.replace("\n", "").strip()
+
+
+def sanitize_url(show_url: str) -> str:
+    """ Sanitize URL submitted by user """
+    # TODO
+    return ""
 
 
 def get_show_data(show_url: str, reload_data: bool = False):
@@ -75,10 +81,11 @@ def get_show_data(show_url: str, reload_data: bool = False):
 
 
 if __name__ == "__main__":
-    show_data = get_show_data(GREYS_URL, False)
-    print(show_data.pivot(index="Episode", columns="Season", values="Rating"))
-
-    fig = sns.lineplot(
-        x="Episode", y="Rating", hue="Season", data=show_data, legend="full"
+    show_data = get_show_data(GOT_URL, False).pivot(
+        index="Season", columns="Episode", values="Rating"
     )
+    print(show_data)
+
+    f, ax = plt.subplots(figsize=(9, 6))
+    sns.heatmap(show_data, annot=True, linewidths=0.5, ax=ax)
     plt.show()
